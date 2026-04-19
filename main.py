@@ -1,37 +1,24 @@
 from models.salle import Salle
-from data.dao_salle import DataSalle
+from services.service_salle import ServiceSalle
 
-dao = DataSalle()
+service = ServiceSalle()
 
-# Test connexion
-try:
-    conn = dao.get_connection()
-    print("Connexion MySQL reussie")
-    conn.close()
-except Exception as e:
-    print("Erreur connexion :", e)
+s1 = Salle("B201", "Salle de reunion", "Bureau", 15)
 
-# Ajouter une salle
-s1 = Salle("A101", "Salle informatique", "Laboratoire", 25)
-dao.insert_salle(s1)
-print("Salle ajoutee")
+succes, message = service.ajouter_salle(s1)
+print(message)
 
-# Modifier la salle
-s1.description = "Salle informatique principale"
-s1.capacite = 30
-dao.update_salle(s1)
-print("Salle modifiee")
-
-# Rechercher une salle
-salle_trouvee = dao.get_salle("A101")
-if salle_trouvee:
-    print("Salle trouvee :", salle_trouvee.afficher_infos())
-
-# Afficher toutes les salles
-print("Liste des salles :")
-for salle in dao.get_salles():
+salles = service.recuperer_salles()
+for salle in salles:
     print(salle.afficher_infos())
 
-# Supprimer une salle
-dao.delete_salle("A101")
+s1.description = "Salle de reunion principale"
+succes, message = service.modifier_salle(s1)
+print(message)
+
+salle = service.rechercher_salle("B201")
+if salle:
+    print("Recherche :", salle.afficher_infos())
+
+service.supprimer_salle("B201")
 print("Salle supprimee")
