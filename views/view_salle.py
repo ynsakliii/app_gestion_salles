@@ -54,6 +54,7 @@ def creer_widgets(self):
     self.btn_rechercher = ctk.CTkButton(self.cadreActions, text="Rechercher", command=self.rechercher_salle)
     self.btn_rechercher.pack(side="left", padx=10, pady=10)
 
+
 # Cadre Liste des salles
 self.cadreList = ctk.CTkFrame(self, corner_radius=10, width=400)
 self.cadreList.pack(padx=10, pady=10)
@@ -77,3 +78,14 @@ self.treeList.column("capacite", width=100)
 self.treeList.pack(expand=True, fill="both", padx=10, pady=10)
 
 self.lister_salles()
+
+
+def ajouter_salle(self):
+    salle = Salle(
+        self.entry_code.get(),
+        self.entry_description.get(),
+        self.entry_categorie.get(),
+        int(self.entry_capacite.get())
+    )
+    self.service_salle.ajouter_salle(salle)
+    self.lister_salles()
