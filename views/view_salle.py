@@ -54,7 +54,6 @@ def creer_widgets(self):
     self.btn_rechercher = ctk.CTkButton(self.cadreActions, text="Rechercher", command=self.rechercher_salle)
     self.btn_rechercher.pack(side="left", padx=10, pady=10)
 
-
     # Cadre Liste des salles
     self.cadreList = ctk.CTkFrame(self, corner_radius=10, width=400)
     self.cadreList.pack(padx=10, pady=10)
@@ -90,17 +89,35 @@ def ajouter_salle(self):
     self.service_salle.ajouter_salle(salle)
     self.lister_salles()
 
- def modifier_salle(self):
-        salle = Salle(
-            self.entry_code.get(),
-            self.entry_description.get(),
-            self.entry_categorie.get(),
-            int(self.entry_capacite.get())
-        )
-        self.service_salle.modifier_salle(salle)
-        self.lister_salles()
 
- def supprimer_salle(self):
-        code = self.entry_code.get()
-        self.service_salle.supprimer_salle(code)
-        self.lister_salles()
+def modifier_salle(self):
+    salle = Salle(
+        self.entry_code.get(),
+        self.entry_description.get(),
+        self.entry_categorie.get(),
+        int(self.entry_capacite.get())
+    )
+    self.service_salle.modifier_salle(salle)
+    self.lister_salles()
+
+
+def supprimer_salle(self):
+    code = self.entry_code.get()
+    self.service_salle.supprimer_salle(code)
+    self.lister_salles()
+
+
+def rechercher_salle(self):
+    code = self.entry_code.get()
+    salle = self.service_salle.rechercher_salle(code)
+
+    if salle is not None:
+        self.entry_description.delete(0, "end")
+        self.entry_description.insert(0, salle.description)
+
+        self.entry_categorie.delete(0, "end")
+        self.entry_categorie.insert(0, salle.categorie)
+
+        self.entry_capacite.delete(0, "end")
+        self.entry_capacite.insert(0, salle.capacite)
+
