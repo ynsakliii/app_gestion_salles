@@ -1,10 +1,42 @@
 import json
+
+import config
 import mysql.connector
-from models.salle import Salle<
+from models.salle import Salle
+
 
 class DataSalle:
     def __init__(self):
         pass
+
     def get_connection(self):
         with open("data/config.json", "r") as f:
             config = json.load(f)
+
+
+conn = mysql.connector.connect(
+    host=config["host"],
+    user=config["user"],
+    password=config["password"],
+    database=config["database"]
+)
+return conn
+
+
+def insert_salle(self, salle):
+
+
+    conn = self.get_connection()
+cursor = conn.cursor()
+
+query = """
+        INSERT INTO salle (code, description, categorie, capacite)
+        VALUES (%s, %s, %s, %s) \
+        """
+values = (salle.code, salle.description, salle.categorie, salle.capacite)
+
+cursor.execute(query, values)
+conn.commit()
+
+cursor.close()
+conn.close()
