@@ -1,6 +1,4 @@
 import json
-
-import config
 import mysql.connector
 from models.salle import Salle
 
@@ -13,46 +11,42 @@ class DataSalle:
         with open("data/config.json", "r") as f:
             config = json.load(f)
 
+        conn = mysql.connector.connect(
+            host=config["host"],
+            user=config["user"],
+            password=config["password"],
+            database=config["database"]
+        )
+        return conn
 
-conn = mysql.connector.connect(
-    host=config["host"],
-    user=config["user"],
-    password=config["password"],
-    database=config["database"]
-)
-return conn
+    def insert_salle(self, salle):
+        conn = self.get_connection()
+        cursor = conn.cursor()
 
+        query = """
+                INSERT INTO salle (code, description, categorie, capacite)
+                VALUES (%s, %s, %s, %s) \
+                """
+        values = (salle.code, salle.description, salle.categorie, salle.capacite)
 
-def insert_salle(self, salle):
-    conn = self.get_connection()
+        cursor.execute(query, values)
+        conn.commit()
 
+        cursor.close()
+        conn.close()
 
-cursor = conn.cursor()
+    def update_salle(self, salle):
+        conn = self.get_connection()
+        cursor = conn.cursor()
 
-query = """
-        INSERT INTO salle (code, description, categorie, capacite)
-        VALUES (%s, %s, %s, %s) \
-        """
-values = (salle.code, salle.description, salle.categorie, salle.capacite)
+        query = """
+                UPDATE salle
+                SET description = %s, \
+                    categorie   = %s, \
+                    capacite    = %s
+                WHERE code = %s \
+                """
 
-cursor.execute(query, values)
-conn.commit()
-
-cursor.close()
-conn.close()
-
-
-def update_salle(self, salle):
-    conn = self.get_connection()
-    cursor = conn.cursor()
-
-    query = """
-            UPDATE salle
-            SET description=%s, \
-                categorie=%s, \
-                capacite=%s
-            WHERE code = %s \
-            """
     values = (salle.description, salle.categorie, salle.capacite, salle.code)
 
     cursor.execute(query, values)
@@ -60,4 +54,3 @@ def update_salle(self, salle):
 
     cursor.close()
     conn.close()
-
