@@ -55,29 +55,29 @@ def creer_widgets(self):
     self.btn_rechercher.pack(side="left", padx=10, pady=10)
 
 
-# Cadre Liste des salles
-self.cadreList = ctk.CTkFrame(self, corner_radius=10, width=400)
-self.cadreList.pack(padx=10, pady=10)
+    # Cadre Liste des salles
+    self.cadreList = ctk.CTkFrame(self, corner_radius=10, width=400)
+    self.cadreList.pack(padx=10, pady=10)
 
-self.treeList = ttk.Treeview(
-    self.cadreList,
-    columns=("code", "description", "categorie", "capacite"),
-    show="headings"
-)
+    self.treeList = ttk.Treeview(
+        self.cadreList,
+        columns=("code", "description", "categorie", "capacite"),
+        show="headings"
+    )
 
-self.treeList.heading("code", text="CODE")
-self.treeList.heading("description", text="Description")
-self.treeList.heading("categorie", text="Catégorie")
-self.treeList.heading("capacite", text="Capacité")
+    self.treeList.heading("code", text="CODE")
+    self.treeList.heading("description", text="Description")
+    self.treeList.heading("categorie", text="Catégorie")
+    self.treeList.heading("capacite", text="Capacité")
 
-self.treeList.column("code", width=50)
-self.treeList.column("description", width=150)
-self.treeList.column("categorie", width=100)
-self.treeList.column("capacite", width=100)
+    self.treeList.column("code", width=50)
+    self.treeList.column("description", width=150)
+    self.treeList.column("categorie", width=100)
+    self.treeList.column("capacite", width=100)
 
-self.treeList.pack(expand=True, fill="both", padx=10, pady=10)
+    self.treeList.pack(expand=True, fill="both", padx=10, pady=10)
 
-self.lister_salles()
+    self.lister_salles()
 
 
 def ajouter_salle(self):
@@ -89,3 +89,14 @@ def ajouter_salle(self):
     )
     self.service_salle.ajouter_salle(salle)
     self.lister_salles()
+
+ def modifier_salle(self):
+        salle = Salle(
+            self.entry_code.get(),
+            self.entry_description.get(),
+            self.entry_categorie.get(),
+            int(self.entry_capacite.get())
+        )
+        self.service_salle.modifier_salle(salle)
+        self.lister_salles()
+        
