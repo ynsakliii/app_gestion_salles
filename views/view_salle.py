@@ -99,4 +99,8 @@ def ajouter_salle(self):
         )
         self.service_salle.modifier_salle(salle)
         self.lister_salles()
-        
+
+ def supprimer_salle(self):
+        code = self.entry_code.get()
+        self.service_salle.supprimer_salle(code)
+        self.lister_salles()
