@@ -24,9 +24,9 @@ return conn
 
 
 def insert_salle(self, salle):
-
-
     conn = self.get_connection()
+
+
 cursor = conn.cursor()
 
 query = """
@@ -40,3 +40,24 @@ conn.commit()
 
 cursor.close()
 conn.close()
+
+
+def update_salle(self, salle):
+    conn = self.get_connection()
+    cursor = conn.cursor()
+
+    query = """
+            UPDATE salle
+            SET description=%s, \
+                categorie=%s, \
+                capacite=%s
+            WHERE code = %s \
+            """
+    values = (salle.description, salle.categorie, salle.capacite, salle.code)
+
+    cursor.execute(query, values)
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
