@@ -24,9 +24,9 @@ class DataSalle:
         cursor = conn.cursor()
 
         query = """
-                INSERT INTO salle (code, description, categorie, capacite)
-                VALUES (%s, %s, %s, %s) \
-                """
+        INSERT INTO salle (code, description, categorie, capacite)
+        VALUES (%s, %s, %s, %s)
+        """
         values = (salle.code, salle.description, salle.categorie, salle.capacite)
 
         cursor.execute(query, values)
@@ -40,63 +40,57 @@ class DataSalle:
         cursor = conn.cursor()
 
         query = """
-                UPDATE salle
-                SET description = %s, \
-                    categorie   = %s, \
-                    capacite    = %s
-                WHERE code = %s \
-                """
+        UPDATE salle
+        SET description = %s, categorie = %s, capacite = %s
+        WHERE code = %s
+        """
+        values = (salle.description, salle.categorie, salle.capacite, salle.code)
 
-    values = (salle.description, salle.categorie, salle.capacite, salle.code)
+        cursor.execute(query, values)
+        conn.commit()
 
-    cursor.execute(query, values)
-    conn.commit()
+        cursor.close()
+        conn.close()
 
-    cursor.close()
-    conn.close()
+    def delete_salle(self, code):
+        conn = self.get_connection()
+        cursor = conn.cursor()
 
+        query = "DELETE FROM salle WHERE code = %s"
+        cursor.execute(query, (code,))
+        conn.commit()
 
-def delete_salle(self, code):
-    conn = self.get_connection()
-    cursor = conn.cursor()
+        cursor.close()
+        conn.close()
 
-    query = "DELETE FROM salle WHERE code = %s"
-    cursor.execute(query, (code,))
-    conn.commit()
+    def get_salle(self, code):
+        conn = self.get_connection()
+        cursor = conn.cursor()
 
-    cursor.close()
-    conn.close()
+        query = "SELECT code, description, categorie, capacite FROM salle WHERE code = %s"
+        cursor.execute(query, (code,))
+        row = cursor.fetchone()
 
+        cursor.close()
+        conn.close()
 
-def get_salle(self, code):
-    conn = self.get_connection()
-    cursor = conn.cursor()
+        if row:
+            return Salle(row[0], row[1], row[2], row[3])
+        return None
 
-    query = "SELECT code, description, categorie, capacite FROM salle WHERE code = %s"
-    cursor.execute(query, (code,))
-    row = cursor.fetchone()
+    def get_salles(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
 
-    cursor.close()
-    conn.close()
+        query = "SELECT code, description, categorie, capacite FROM salle"
+        cursor.execute(query)
+        rows = cursor.fetchall()
 
-    if row:
-        return Salle(row[0], row[1], row[2], row[3])
-    return None
+        cursor.close()
+        conn.close()
 
+        salles = []
+        for row in rows:
+            salles.append(Salle(row[0], row[1], row[2], row[3]))
 
-def get_salles(self):
-    conn = self.get_connection()
-    cursor = conn.cursor()
-
-    query = "SELECT code, description, categorie, capacite FROM salle"
-    cursor.execute(query)
-    rows = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-
-    salles = []
-    for row in rows:
-        salles.append(Salle(row[0], row[1], row[2], row[3]))
-
-    return salles
+        return salles
